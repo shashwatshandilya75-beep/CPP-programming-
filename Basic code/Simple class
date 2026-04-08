@@ -1,0 +1,17 @@
+#include <iostream>
+#include <string>
+
+class Car {
+  public:
+    std::string brand;
+    void drive() {
+        std::cout << "The " << brand << " is driving!";
+    }
+};
+
+int main() {
+    Car myCar;
+    myCar.brand = "Toyota";
+    myCar.drive();
+    return 0;
+}
