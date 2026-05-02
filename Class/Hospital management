@@ -1,0 +1,57 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Hospital {
+private:
+    string patientName;
+    string disease;
+    float temp;
+
+public:
+    // Constructor to set values
+    Hospital(string name, string dis, float t) {
+        patientName = name;
+        disease = dis;
+        temp = t;
+    }
+
+    void CheckStatus() {
+        if (temp <= 99.0) {
+            cout << "Condition: Normal." << endl;
+        } 
+        else {
+            cout << "Condition: Fever Detected!" << endl;
+            cout << "Action: Please visit the doctor immediately." << endl;
+        }
+    }
+};
+
+int main() {
+    // Declaring variables first
+    string name;
+    string dis;
+    float temperature;
+
+    cout << "--- Hospital Management ---" << endl;
+    
+    // Using cin >> in a simple way
+    cout << "Enter Patient Name: ";
+    cin >> name;
+    
+    cout << "Enter Disease: ";
+    cin >> dis;
+    
+    cout << "Enter Temperature: ";
+    cin >> temperature;
+
+  
+    Hospital patient(name, dis, temperature);
+
+    // Calling the function
+
+    patient.CheckStatus();
+
+    return 0;
+}
