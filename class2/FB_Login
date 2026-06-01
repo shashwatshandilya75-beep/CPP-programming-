@@ -1,0 +1,51 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class FB {
+private:
+    string username;
+    string password;
+    int age;
+
+public:
+    FB(string user, string pass, int a) {
+        username = user;
+        password = pass;
+        age = a;
+    }
+
+    void FBLogin() {
+        if (age >= 18) {
+            cout << "Login Successfully!" << endl;
+        } 
+        else {
+            cout << "Login Failed." << endl;
+            cout << "Error: You must be 18+ to Login." << endl;
+        }
+    }
+};
+
+int main() {
+    string name, pass;
+    int Age;
+
+    cout << "--- Facebook Login Page ---" << endl;
+    
+    cout << "Enter Username: ";
+    getline(cin, name);
+    
+    cout << "Enter Password: ";
+    getline(cin, pass);
+    
+    cout << "Enter Age: ";
+    cin >> Age;
+
+    FB userAccount(name, pass, Age);
+
+
+    userAccount.FBLogin();
+
+    return 0;
+}
