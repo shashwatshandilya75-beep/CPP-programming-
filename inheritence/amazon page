@@ -1,0 +1,188 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Base Class: Handles general account data and Amazon Pay wallet
+class Account {
+protected:
+    string name;
+    string phone;
+    string password; 
+    double wallet_balance;
+
+public:
+    // Constructor for Base Class
+    Account(string n, string p, string pass) {
+        name = n;
+        phone = p;
+        password = pass;
+        wallet_balance = 0.0;
+    }
+
+    // Getters for login verification
+    string getPhone() { return phone; }
+    
+    bool checkPassword(string input_pass) {
+        return password == input_pass;
+    }
+
+    string getName() { return name; }
+
+    // Amazon Pay Methods
+    void addMoney(double amount) {
+        if (amount > 0) {
+            wallet_balance += amount;
+            cout << "₹" << amount << " successfully added to Amazon Pay!\n";
+        } else {
+            cout << "Invalid amount!\n";
+        }
+    }
+
+    double getBalance() {
+        return wallet_balance;
+    }
+
+    bool deductMoney(double amount) {
+        if (wallet_balance >= amount) {
+            wallet_balance -= amount;
+            return true;
+        }
+        return false;
+    }
+};
+
+// Derived Class: Inherits from Account
+class AmazonCustomer : public Account {
+private:
+    int age; 
+
+public:
+    // Constructor calls the Base Class constructor using an initializer list
+    AmazonCustomer(string n, int a, string p, string pass) : Account(n, p, pass) {
+        age = a;
+    }
+
+    int getAge() { return age; }
+};
+
+// Class to manage Store Inventory
+class AmazonStore {
+private:
+    string itemNames[5] = {
+        "Wireless Headphones", 
+        "Running Shoes", 
+        "Smartphone", 
+        "Smart Watch", 
+        "Coffee Mug"
+    };
+    double itemPrices[5] = {2500.0, 3500.0, 15000.0, 4000.0, 500.0};
+
+public:
+    void displayItems() {
+        cout << "\n--- Available Items on Amazon ---\n";
+        for (int i = 0; i < 5; i++) {
+            cout << (i + 1) << ". " << itemNames[i] << " - ₹" << itemPrices[i] << "\n";
+        }
+        cout << "---------------------------------\n";
+    }
+
+    double getItemPrice(int choice) {
+        if (choice >= 1 && choice <= 5) {
+            return itemPrices[choice - 1];
+        }
+        return -1;
+    }
+};
+
+// --- Main Application ---
+int main() {
+    AmazonStore store;
+    
+    string name, phone, password;
+    int age;
+
+    cout << "=== Welcome to Amazon Registration ===\n";
+    cout << "Enter Name: ";
+    cin >> name; 
+    cout << "Enter Age: ";
+    cin >> age;
+    cout << "Enter Phone Number: ";
+    cin >> phone;
+    cout << "Create Password: ";
+    cin >> password;
+
+    // Creating object of the Derived Class
+    AmazonCustomer user(name, age, phone, password);
+    cout << "\nRegistration Successful!\n\n";
+
+    // Login Verification
+    string login_phone, login_pass;
+    cout << "=== Login to Amazon ===\n";
+    cout << "Enter Phone Number: ";
+    cin >> login_phone;
+    cout << "Enter Password: ";
+    cin >> login_pass;
+
+    // user smoothly accesses base class methods like getPhone() and checkPassword()
+    if (login_phone == user.getPhone() && user.checkPassword(login_pass)) {
+        cout << "\nWelcome back, " << user.getName() << "!\n";
+        
+        while (true) {
+            cout << "\n1. View Items & Shop\n";
+            cout << "2. Check Amazon Pay Balance\n";
+            cout << "3. Add Money to Amazon Pay\n";
+            cout << "4. Exit\n";
+            cout << "Choose an option: ";
+            int choice;
+            cin >> choice;
+
+            if (choice == 1) {
+                store.displayItems();
+                cout << "Enter the item number to buy (1-5): ";
+                int item_choice;
+                cin >> item_choice;
+
+                double price = store.getItemPrice(item_choice);
+                if (price != -1) {
+                    cout << "Total Amount: ₹" << price << "\n";
+                    cout << "Pay using Amazon Pay? (yes/no): ";
+                    string pay_choice;
+                    cin >> pay_choice;
+
+                    if (pay_choice == "yes" || pay_choice == "YES") {
+                        // Accessing inherited logic smoothly
+                        if (user.deductMoney(price)) {
+                            cout << "Order placed successfully! Remaining Amazon Pay Balance: ₹" << user.getBalance() << "\n";
+                        } else {
+                            cout << "Insufficient balance! Please add money to Amazon Pay first.\n";
+                        }
+                    } else {
+                        cout << "Order cancelled.\n";
+                    }
+                } else {
+                    cout << "Invalid item selection.\n";
+                }
+
+            } else if (choice == 2) {
+                cout << "\nYour Amazon Pay Balance is: ₹" << user.getBalance() << "\n";
+
+            } else if (choice == 3) {
+                double amount;
+                cout << "Enter amount to add to Amazon Pay: ₹";
+                cin >> amount;
+                user.addMoney(amount);
+
+            } else if (choice == 4) {
+                cout << "Thank you for shopping with Amazon!\n";
+                break;
+            } else {
+                cout << "Invalid choice. Try again.\n";
+            }
+        }
+    } else {
+        cout << "Invalid credentials! Login Failed.\n";
+    }
+
+    return 0;
+}
