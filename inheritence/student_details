@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Member {
+private:
+    string name;
+    int age;
+
+public:
+    void setDetails(string n, int a) {
+        name = n;
+        age = a;
+    }
+
+    string getName() { return name; }
+    int getAge() { return age; }
+};
+
+class Student : public Member {
+private:
+    string course;
+
+public:
+    void setCourse(string c) {
+        course = c;
+    }
+
+    void displayStudent() {
+        cout << "--- Student Details ---" << endl;
+        cout << "Name: " << getName() << endl;
+        cout << "Age: " << getAge() << endl;
+        cout << "Course: " << course << endl;
+    }
+};
+
+class Teacher : public Member {
+private:
+    string subject;
+
+public:
+    void setSubject(string s) {
+        subject = s;
+    }
+
+    void displayTeacher() {
+        cout << "\n--- Teacher Details ---" << endl;
+        cout << "Name: " << getName() << endl;
+        cout << "Age: " << getAge() << endl;
+        cout << "Subject: " << subject << endl;
+    }
+};
+
+int main() {
+    Student s;
+    s.setDetails("Shashwat", 19);
+    s.setCourse("Computer Science & Engineering");
+    s
+    .displayStudent();
+
+    Teacher t;
+    t.setDetails("Dr. Sharma", 42);
+    t.setSubject("Advanced Data Structures");
+    t.displayTeacher();
+
+    return 0;
+}
