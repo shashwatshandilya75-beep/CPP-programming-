@@ -1,0 +1,134 @@
+#include <iostream>
+#include <string>
+
+
+class Employee {
+protected:
+    int id;
+    std::string name;
+    double baseSalary;
+
+public:
+    Employee(int id, std::string name, double baseSalary)
+        : id(id), name(name), baseSalary(baseSalary) {}
+
+    
+    virtual ~Employee() {
+        std::cout << "[System] Cleaning up data for: " << name << std::endl;
+    }
+
+    
+    virtual void displayDashboard() const = 0;
+    
+  
+    virtual double calculateSalary() const {
+        return baseSalary;
+    }
+
+    std::string getName() const { return name; }
+    int getId() const { return id; }
+};
+
+
+class Manager : public Employee {
+private:
+    double bonus;
+
+public:
+    Manager(int id, std::string name, double baseSalary, double bonus)
+        : Employee(id, name, baseSalary), bonus(bonus) {}
+
+    double calculateSalary() const override {
+        return baseSalary + bonus;
+    }
+
+    void displayDashboard() const override {
+        std::cout << "\n--- Manager Dashboard: " << name << " (ID: " << id << ") ---" << std::endl;
+        std::cout << "Action: Approve Leaves | View Financial Reports" << std::endl;
+    }
+};
+
+class Developer : public Employee {
+private:
+    std::string primaryLanguage;
+    int overtimeHours;
+    double hourlyRate;
+
+public:
+    Developer(int id, std::string name, double baseSalary, std::string language, int overtime, double rate)
+        : Employee(id, name, baseSalary), primaryLanguage(language), overtimeHours(overtime), hourlyRate(rate) {}
+
+    double calculateSalary() const override {
+        return baseSalary + (overtimeHours * hourlyRate);
+    }
+
+    void displayDashboard() const override {
+        std::cout << "\n--- Developer Dashboard: " << name << " (ID: " << id << ") ---" << std::endl;
+        std::cout << "Language: " << primaryLanguage << " | Action: View Tasks | Commit Code" << std::endl;
+    }
+};
+
+
+class ERPSystem {
+private:
+    static const int MAX_EMPLOYEES = 10;
+    Employee* staff[MAX_EMPLOYEES]; 
+    int employeeCount;
+
+public:
+    ERPSystem() : employeeCount(0) {
+        for (int i = 0; i < MAX_EMPLOYEES; ++i) {
+            staff[i] = nullptr;
+        }
+    }
+
+    ~ERPSystem() {
+        std::cout << "\n================ CLOSING ERP SYSTEM ================" << std::endl;
+        for (int i = 0; i < employeeCount; ++i) {
+            delete staff[i]; // Manually deleting raw pointers
+        }
+    }
+
+    bool addEmployee(Employee* emp) {
+        if (employeeCount < MAX_EMPLOYEES) {
+            staff[employeeCount] = emp;
+            employeeCount++;
+            return true;
+        }
+        std::cout << "ERP Error: Maximum employee capacity reached!" << std::endl;
+        return false;
+    }
+
+    void runPayroll() const {
+
+        double totalCost = 0;
+        for (int i = 0; i < employeeCount; ++i) {
+            double salary = staff[i]->calculateSalary(); // Polymorphic call
+            std::cout << "ID: " << staff[i]->getId() 
+                      << " | Name: " << staff[i]->getName() 
+                      << " | Payout: $" << salary << std::endl;
+            totalCost += salary;
+        }
+        
+        std::cout << "Total Company Payout Expenses: $" << totalCost << std::endl;
+    }
+
+    void showDashboards() const {
+        for (int i = 0; i < employeeCount; ++i) {
+            staff[i]->displayDashboard(); // Polymorphic call
+        }
+    }
+};
+
+int main() {
+    ERPSystem erp;
+
+    
+    erp.addEmployee(new Manager(101, "Alice Smith", 8000.0, 2500.0));
+    erp.addEmployee(new Developer(102, "Bob Jones", 6000.0, "C++", 10, 50.0));
+    erp.addEmployee(new Developer(103, "Charlie Brown", 5500.0, "Python", 0, 0.0));
+    erp.showDashboards();
+    erp.runPayroll();
+
+    return 0;
+}
