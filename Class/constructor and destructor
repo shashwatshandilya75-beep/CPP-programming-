@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+
+class Student {
+private:
+    std::string name;
+    int rollNumber;
+
+public:
+    Student() {
+        name = "Unknown";
+        rollNumber = 0;
+        std::cout << "Default Constructor called! Object created for: " << name << std::endl;
+    }
+
+    Student(std::string studentName, int rollNum) {
+        name = studentName;
+        rollNumber = rollNum;
+        std::cout << "Parameterized Constructor called! Object created for: " << name << std::endl;
+    }
+
+    void display() {
+        std::cout << "Student Name: " << name << ", Roll Number: " << rollNumber << std::endl;
+    }
+
+    ~Student() {
+        std::cout << "Destructor called! Object for " << name << " is being destroyed." << std::endl;
+    }
+};
+
+int main() {
+    std::cout << "--- Creating Object 1 inside main ---" << std::endl;
+    Student student1;
+    student1.display();
+
+    std::cout << "\n--- Creating Object 2 inside a custom scope block ---" << std::endl;
+    {
+        Student student2("Alice", 101);
+        student2.display();
+    }
+
+    std::cout << "\n--- Main function ending soon ---" << std::endl;
+    return 0; 
+}
