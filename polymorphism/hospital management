@@ -1,0 +1,77 @@
+#include <iostream>
+#include <vector>
+#include <string>
+#include <iomanip>
+
+class Person {
+protected:
+    std::string id;
+    std::string name;
+    std::string phone;
+
+public:
+    Person(std::string pId, std::string pName, std::string pPhone)
+        : id(pId), name(pName), phone(pPhone) {}
+
+    virtual ~Person() {}
+
+    virtual void view_medical_file() const {
+        std::cout << "ID: " << id << " | Name: " << name << " | Contact: " << phone << std::endl;
+    }
+};
+
+class Patient : public Person {
+private:
+    std::string diagnosis;
+    double current_bill;
+
+public:
+    Patient(std::string patId, std::string patName, std::string patPhone, std::string patDiag, double patBill)
+        : Person(patId, patName, patPhone), diagnosis(patDiag), current_bill(patBill) {}
+
+    void view_medical_file() const override {
+        std::cout << "=== PATIENT ADMISSION RECORD ===" << std::endl;
+        Person::view_medical_file();
+        std::cout << "Current Diagnosis: " << diagnosis << std::endl;
+        std::cout << "Pending Medical Bill: $" << std::fixed << std::setprecision(2) << current_bill << std::endl;
+        std::cout << "================================" << std::endl;
+    }
+};
+
+class Doctor : public Person {
+private:
+    std::string specialization;
+    double consultation_fee;
+
+public:
+    Doctor(std::string docId, std::string docName, std::string docPhone, std::string docSpec, double docFee)
+        : Person(docId, docName, docPhone), specialization(docSpec), consultation_fee(docFee) {}
+
+    void view_medical_file() const override {
+        std::cout << "=== ATTENDING MEDICAL STAFF ===" << std::endl;
+        Person::view_medical_file();
+        std::cout << "Medical Specialty: " << specialization << std::endl;
+        std::cout << "Standard Visit Fee: $" << std::fixed << std::setprecision(2) << consultation_fee << std::endl;
+        std::cout << "===============================" << std::endl;
+    }
+};
+
+int main() {
+    std::vector<Person*> hospital_erp;
+
+    hospital_erp.push_back(new Patient("PT992", "John Doe", "555-0192", "Acute Appendicitis", 4500.25));
+    hospital_erp.push_back(new Doctor("DR044", "Dr. Sarah Lin", "555-0144", "Cardiology", 150.00));
+    hospital_erp.push_back(new Patient("PT993", "Jane Miller", "555-0177", "Type 2 Diabetes", 120.00));
+
+    for (const Person* entity : hospital_erp) {
+        entity->view_medical_file();
+        std::cout << std::endl;
+    }
+
+    for (Person* entity : hospital_erp) {
+        delete entity;
+    }
+    hospital_erp.clear();
+
+    return 0;
+}
