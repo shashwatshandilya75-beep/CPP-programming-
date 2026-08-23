@@ -1,0 +1,37 @@
+#include <iostream>
+#include <cmath>
+
+int main() {
+    int number;
+
+    std::cout << "Enter a positive integer: ";
+    std::cin >> number;
+
+   
+    if (number <= 1) {
+        std::cout << number << " is not a prime number." << std::endl;
+        return 0;
+    }
+
+    bool isPrime = true;
+    int divisor = 0;
+
+    
+    for (int i = 2; i <= std::sqrt(number); ++i) {
+        if (number % i == 0) {
+            isPrime = false;
+            divisor = i; // Save the first found divisor
+            break;
+        }
+    }
+
+   
+    if (isPrime) {
+        std::cout << number << " is a prime number." << std::endl;
+    } else {
+        std::cout << number << " is not a prime number." << std::endl;
+        std::cout << "It is divisible by: " << divisor << " (e.g., " << divisor << " * " << (number / divisor) << " = " << number << ")" << std::endl;
+    }
+
+    return 0;
+}
