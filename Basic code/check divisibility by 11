@@ -1,0 +1,20 @@
+#include <iostream>
+
+int main() {
+    int number;
+
+    
+    std::cout << "Enter a number: ";
+    std::cin >> number;
+
+    
+    if (number % 11 == 0) {
+        std::cout << number << " is divisible by 11." << std::endl;
+        std::cout << "Result after dividing by 11: " << (number / 11) << std::endl;
+    } else {
+        std::cout << number << " is not divisible by 11." << std::endl;
+        std::cout << "Remainder when divided by 11: " << (number % 11) << std::endl;
+    }
+
+    return 0;
+}
