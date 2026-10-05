@@ -1,0 +1,27 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(std::string s) {
+        std::vector<int> last_seen(256, -1);
+        
+        int max = 0;
+        int left = 0; 
+        
+        for (int right = 0; right < s.length(); ++right) {
+            char x = s[right];
+            
+            if (last_seen[x] >= left) {
+                left = last_seen[x] + 1;
+            }
+            
+            last_seen[x] = right;
+            
+            max = std::max(max, right - left + 1);
+        }
+        
+        return max;
+    }
+};
